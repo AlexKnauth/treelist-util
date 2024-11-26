@@ -5,7 +5,7 @@
 (define collection "treelist-util")
 (define deps
   '("base"
-    ))
+    "reprovide-lang-lib"))
 
 (define build-deps
   '("scribble-lib"
