@@ -177,3 +177,18 @@ first element not satisfying @racket[pred] and onward.
          treelist?]]]{
 Operations similar to their counterparts from @racketmodname[racket/list].
 }
+
+@deftogether[[
+@defproc[(treelist-cartesian-product [tl treelist?] ...) treelist?]
+@defproc[(treelist-cartesian-product* [tls treelist?]) treelist?]]]{
+Computes the n-ary cartesian product of the given treelists.
+
+@examples[
+#:eval the-eval
+(treelist-cartesian-product (treelist 1 2 3) (treelist 'a 'b 'c))
+(treelist-cartesian-product*
+ (treelist (treelist 1 2 3) (treelist 'a 'b 'c)))
+(treelist-cartesian-product (treelist 4 5 6) (treelist 'd 'e 'f) (treelist #t #f))
+(treelist-cartesian-product*
+ (treelist (treelist 4 5 6) (treelist 'd 'e 'f) (treelist #t #f)))
+]}

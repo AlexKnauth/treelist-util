@@ -60,7 +60,8 @@
          treelist-argmin
          treelist-argmax
          treelist-group-by
-         )
+         treelist-cartesian-product
+         treelist-cartesian-product*)
 
 (require racket/list
          racket/treelist
@@ -896,5 +897,84 @@
                           (treelist 2 2 2 5 2 2)
                           (treelist 54 0))))
 
-;; TODO: cartesian-product, cartesian-product*
+;; treelist-cartesian-product, treelist-cartesian-product*
+(module+ test
+  (check-equal? (treelist-cartesian-product (treelist 1 2 3) (treelist 'a 'b 'c))
+                (treelist (treelist 1 'a)
+                          (treelist 1 'b)
+                          (treelist 1 'c)
+                          (treelist 2 'a)
+                          (treelist 2 'b)
+                          (treelist 2 'c)
+                          (treelist 3 'a)
+                          (treelist 3 'b)
+                          (treelist 3 'c)))
+  (check-equal? (treelist-cartesian-product*
+                 (treelist (treelist 1 2 3) (treelist 'a 'b 'c)))
+                (treelist (treelist 1 'a)
+                          (treelist 1 'b)
+                          (treelist 1 'c)
+                          (treelist 2 'a)
+                          (treelist 2 'b)
+                          (treelist 2 'c)
+                          (treelist 3 'a)
+                          (treelist 3 'b)
+                          (treelist 3 'c)))
+  (check-equal? (treelist-cartesian-product (treelist 4 5 6)
+                                            (treelist 'd 'e 'f)
+                                            (treelist #t #f))
+                (treelist (treelist 4 'd #t)
+                          (treelist 4 'd #f)
+                          (treelist 4 'e #t)
+                          (treelist 4 'e #f)
+                          (treelist 4 'f #t)
+                          (treelist 4 'f #f)
+                          (treelist 5 'd #t)
+                          (treelist 5 'd #f)
+                          (treelist 5 'e #t)
+                          (treelist 5 'e #f)
+                          (treelist 5 'f #t)
+                          (treelist 5 'f #f)
+                          (treelist 6 'd #t)
+                          (treelist 6 'd #f)
+                          (treelist 6 'e #t)
+                          (treelist 6 'e #f)
+                          (treelist 6 'f #t)
+                          (treelist 6 'f #f)))
+  (check-equal? (treelist-cartesian-product*
+                 (treelist (treelist 4 5 6)
+                           (treelist 'd 'e 'f)
+                           (treelist #t #f)))
+                (treelist (treelist 4 'd #t)
+                          (treelist 4 'd #f)
+                          (treelist 4 'e #t)
+                          (treelist 4 'e #f)
+                          (treelist 4 'f #t)
+                          (treelist 4 'f #f)
+                          (treelist 5 'd #t)
+                          (treelist 5 'd #f)
+                          (treelist 5 'e #t)
+                          (treelist 5 'e #f)
+                          (treelist 5 'f #t)
+                          (treelist 5 'f #f)
+                          (treelist 6 'd #t)
+                          (treelist 6 'd #f)
+                          (treelist 6 'e #t)
+                          (treelist 6 'e #f)
+                          (treelist 6 'f #t)
+                          (treelist 6 'f #f))))
+
+(define (treelist-cartesian-product-add ass bs)
+  (for*/treelist ([as (in-treelist ass)] [b (in-treelist bs)])
+    (treelist-add as b)))
+
+(define (treelist-cartesian-product . tls)
+  (for/fold ([acc (treelist empty-treelist)])
+            ([tl (in-list tls)])
+    (treelist-cartesian-product-add acc tl)))
+
+(define (treelist-cartesian-product* tls)
+  (for/fold ([acc (treelist empty-treelist)])
+            ([tl (in-treelist tls)])
+    (treelist-cartesian-product-add acc tl)))
 
