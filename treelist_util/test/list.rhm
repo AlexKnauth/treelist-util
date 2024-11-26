@@ -1,0 +1,26 @@
+#lang rhombus/static/and_meta
+
+import:
+  treelist_util open
+
+check:
+  List.length(["a", "b", "c"])
+  ~is 3
+
+fun is_positive(x :: Real) :: Boolean:
+  0 < x
+
+check:
+  List.andmap(is_positive, [1, 2, 3])
+  ~is #true
+
+check:
+  List.andmap(is_positive, [1, 2, "a"])
+  ~throws values("is_positive: argument does not satisfy annotation",
+                 "argument: \"a\"",
+                 "annotation: Real")
+
+check:
+  List.andmap(is_positive, [1, -2, "a"])
+  ~is #false
+

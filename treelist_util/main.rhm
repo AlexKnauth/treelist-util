@@ -1,0 +1,52 @@
+#lang rhombus/static/and_meta
+
+export:
+  List
+
+import:
+  lib("treelist-util/main.rkt") open
+
+def List.andmap: #{treelist-andmap}
+def List.ormap: #{treelist-ormap}
+
+def List.foldl: #{treelist-foldl}
+def List.foldr: #{treelist-foldr}
+
+def List.filter: #{treelist-filter}
+def List.filter_not: #{treelist-filter-not}
+
+def List.is_empty: #{treelist-empty?}
+
+def List.update: #{treelist-update}
+
+def List.index_of: #{treelist-index-of}
+def List.index_where: #{treelist-index-where}
+
+def List.indexes_of: #{treelist-indexes-of}
+def List.indexes_where: #{treelist-indexes-where}
+
+def List.split: #{treelist-split}
+
+def List.takef: #{treelist-takef}
+def List.dropf: #{treelist-dropf}
+def List.splitf: #{treelist-splitf}
+
+def List.append_all: #{treelist-append*}
+
+def List.flatten: #{treelist-flatten}
+
+def List.filter_map: #{treelist-filter-map}
+def List.count: #{treelist-count}
+
+def List.partition: #{treelist-partition}
+
+def List.append_map: #{treelist-append-map}
+
+def List.argmin: #{treelist-argmin}
+def List.argmax: #{treelist-argmax}
+
+def List.group_by: #{treelist-group-by}
+
+def List.cartesian_product: #{treelist-cartesian-product}
+def List.cartesian_product_all: #{treelist-cartesian-product*}
+
