@@ -82,6 +82,19 @@ If no such element is found, the result is @racket[#f].
 (treelist-index-where items void?)
 ]}
 
+@deftogether[[
+@defproc[(treelist-indexes-of [tl treelist?]
+                              [v any/c]
+                              [eql? (-> any/c any/c any/c) equal?])
+         treelist?]
+@defproc[(treelist-indexes-where [tl treelist?] [pred (-> any/c any/c)]) treelist?]
+@defproc[(treelist-split [tl treelist?] [pos exact-nonnegative-integer?])
+         (values treelist? treelist?)]
+@defproc[(treelist-takef [tl treelist?] [pred (-> any/c any/c)]) treelist?]
+@defproc[(treelist-dropf [tl treelist?] [pred (-> any/c any/c)]) treelist?]]]{
+Operations similar to their counterparts from @racketmodname[racket/list].
+}
+
 @defproc[(treelist-splitf [tl treelist?] [pred (any/c . -> . any/c)])
          (values treelist? treelist?)]{
 
