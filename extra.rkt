@@ -52,6 +52,7 @@
          treelist-remove-duplicates
          treelist-filter-map
          treelist-count
+         treelist-partition
          treelist-range
          treelist-inclusive-range
          treelist-append-map

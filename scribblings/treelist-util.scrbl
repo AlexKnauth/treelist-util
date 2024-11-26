@@ -111,3 +111,69 @@ first element not satisfying @racket[pred] and onward.
 (treelist-splitf (treelist 2 4 6 8) even?)
 (treelist-splitf (treelist 2 4 6 8) odd?)
 ]}
+
+@deftogether[[
+@defproc[(treelist-take-right [tl treelist?] [pos exact-nonnegative-integer?])
+         treelist?]
+@defproc[(treelist-drop-right [tl treelist?] [pos exact-nonnegative-integer?])
+         treelist?]
+@defproc[(treelist-split-right [tl treelist?] [pos exact-nonnegative-integer?])
+         (values treelist? treelist?)]
+@defproc[(treelist-takef-right [tl treelist?] [pred (-> any/c any/c)])
+         treelist?]
+@defproc[(treelist-dropf-right [tl treelist?] [pred (-> any/c any/c)])
+         treelist?]
+@defproc[(treelist-splitf-right [tl treelist?] [pred (-> any/c any/c)])
+         treelist?]
+@defproc[(treelist-prefix? [pre treelist?]
+                           [tl treelist?]
+                           [eql? (-> any/c any/c any/c) equal?])
+         treelist?]
+@defproc[(treelist-take-common-prefix [l treelist?]
+                                      [r treelist?]
+                                      [eql? (-> any/c any/c any/c) equal?])
+         treelist?]
+@defproc[(treelist-drop-common-prefix [l treelist?]
+                                      [r treelist?]
+                                      [eql? (-> any/c any/c any/c) equal?])
+         (values treelist? treelist?)]
+@defproc[(treelist-split-common-prefix [l treelist?]
+                                       [r treelist?]
+                                       [eql? (-> any/c any/c any/c) equal?])
+         (values treelist? treelist? treelist?)]
+@defproc[(treelist-add-between [tl treelist?]
+                               [v any/c]
+                               [#:before-first before-first treelist? empty-treelist]
+                               [#:before-last before-last any/c v]
+                               [#:after-last after-last treelist? empty-treelist]
+                               [#:splice? splice? #false])
+         treelist?]
+@defproc[(treelist-check-duplicates
+          [tl treelist?]
+          [eql? (-> any/c any/c any/c) equal?]
+          [#:key extract-key (λ (x) x)]
+          [#:default failure-result failure-result/c (λ () #false)])
+         any/c]
+@defproc[(treelist-remove-duplicates [tl treelist?]
+                                     [eql? (-> any/c any/c any/c) equal?]
+                                     [#:key extract-key (λ (x) x)])
+         treelist?]
+@defproc[(treelist-filter-map [proc procedure?] [tl treelist?] ...+) treelist?]
+@defproc[(treelist-count [proc procedure?] [tl treelist?] ...+) treelist?]
+@defproc[(treelist-partition [pred (-> any/c any/c)] [tl treelist?])
+         (values treelist? treelist?)]
+@defproc*[([(treelist-range [end real?]) treelist?]
+           [(treelist-range [start real?] [end real?] [step real? 1])
+            treelist?])]
+@defproc[(treelist-inclusive-range [start real?] [end real?] [step real? 1])
+         treelist?]
+@defproc[(treelist-append-map [proc procedure?] [tl treelist?] ...+) treelist?]
+@defproc[(treelist-filter-not [pred (-> any/c any/c)] [tl treelist?]) treelist?]
+@defproc[(treelist-argmin [proc (-> any/c real?)] [tl treelist?]) any/c]
+@defproc[(treelist-argmax [proc (-> any/c real?)] [tl treelist?]) any/c]
+@defproc[(treelist-group-by [key (-> any/c any/c)]
+                            [tl treelist?]
+                            [eql? (-> any/c any/c any/c) equal?])
+         treelist?]]]{
+Operations similar to their counterparts from @racketmodname[racket/list].
+}
