@@ -2,6 +2,7 @@
 
 @(require scribble/example
           (for-label racket/base
+                     racket/contract
                      racket/treelist
                      racket/mutable-treelist
                      treelist-util))
@@ -19,6 +20,51 @@
 @defmodule[treelist-util]
 
 Treelist operations matching @racketmodname[racket/list] that aren't in @racketmodname[racket/treelist].
+
+@deftogether[[
+@defproc[(treelist* [v any/c] ... [tl treelist?]) treelist?]
+@defproc[(build-treelist [n exact-nonnegative-integer?]
+                         [proc (-> exact-nonnegative-integer? any/c)])
+         treelist?]
+@defproc[(treelist-andmap [proc procedure?] [tl treelist?] ...+) any/c]
+@defproc[(treelist-ormap [proc procedure?] [tl treelist?] ...+) any/c]
+@defproc[(treelist-foldl [proc procedure?] [init any/c] [tl treelist?] ...+) any/c]
+@defproc[(treelist-foldr [proc procedure?] [init any/c] [tl treelist?] ...+) any/c]
+@defproc[(treelist-remove [v any/c]
+                          [tl treelist?]
+                          [eql? (-> any/c any/c any/c) equal?])
+         treelist?]
+@defproc[(treelist-remq [v any/c] [tl treelist?]) treelist?]
+@defproc[(treelist-remv [v any/c] [tl treelist?]) treelist?]
+@defproc[(treelist-remw [v any/c] [tl treelist?]) treelist?]
+@defproc[(treelist-remf [pred (-> any/c any/c)] [tl treelist?]) treelist?]
+@defproc[(treelist-remove* [vs treelist?]
+                           [tl treelist?]
+                           [eql? (-> any/c any/c any/c) equal?])
+         treelist?]
+@defproc[(treelist-remq* [vs treelist?] [tl treelist?]) treelist?]
+@defproc[(treelist-remv* [vs treelist?] [tl treelist?]) treelist?]
+@defproc[(treelist-remw* [vs treelist?] [tl treelist?]) treelist?]
+@defproc[(treelist-second [tl treelist?]) any/c]
+@defproc[(treelist-third [tl treelist?]) any/c]
+@defproc[(treelist-fourth [tl treelist?]) any/c]
+@defproc[(treelist-fifth [tl treelist?]) any/c]
+@defproc[(treelist-sixth [tl treelist?]) any/c]
+@defproc[(treelist-seventh [tl treelist?]) any/c]
+@defproc[(treelist-eighth [tl treelist?]) any/c]
+@defproc[(treelist-ninth [tl treelist?]) any/c]
+@defproc[(treelist-tenth [tl treelist?]) any/c]
+@defproc[(treelist-eleventh [tl treelist?]) any/c]
+@defproc[(treelist-twelfth [tl treelist?]) any/c]
+@defproc[(treelist-thirteenth [tl treelist?]) any/c]
+@defproc[(treelist-fourteenth [tl treelist?]) any/c]
+@defproc[(treelist-fifteenth [tl treelist?]) any/c]
+@defproc[(treelist-update [tl treelist?]
+                          [pos exact-nonnegative-integer?]
+                          [updater (-> any/c any/c)])
+         treelist?]]]{
+Operations similar to their counterparts from @racketmodname[racket/list].
+}
 
 @defproc[(treelist-index-where [tl treelist?] [pred (any/c . -> . any/c)])
          (or/c exact-nonnegative-integer? #f)]{
