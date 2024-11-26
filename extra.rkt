@@ -62,7 +62,8 @@
          )
 
 (require racket/list
-         racket/treelist)
+         racket/treelist
+         treelist-util/util/condcomp)
 (module+ test
   (require rackunit)
   (define-syntax-rule (vs->l expr)
@@ -207,6 +208,12 @@
                                 (treelist 1 2 3 4))
                 (treelist 2 3 4 5)))
 
+(if-not-exported
+ racket/treelist
+ treelist-filter
+ (define (treelist-filter keep tl)
+   (for/treelist ([el (in-treelist tl)] #:when (keep el)) el)))
+
 (define (treelist-remove v tl [eql? equal?])
   (check-treelist 'treelist-remove tl)
   (check-procedure-arity-includes 'treelist-remove eql? 2)
@@ -292,6 +299,15 @@
 (module+ test
   (check-equal? (treelist-update (treelist 'zero 'one 'two) 1 symbol->string)
                 (treelist 'zero "one" 'two)))
+
+(if-not-exported
+ racket/treelist
+ treelist-index-of
+ (define (treelist-index-of tl v [eql? equal?])
+   (for/first ([el (in-treelist tl)]
+               [i (in-naturals)]
+               #:when (eql? el v))
+     i)))
 
 (define (treelist-index-where tl match?)
   (check-treelist 'treelist-index-where tl)
