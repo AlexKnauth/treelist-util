@@ -19,7 +19,8 @@
 
 @defmodule[treelist-util]
 
-Treelist operations matching @racketmodname[racket/list] that aren't in @racketmodname[racket/treelist].
+Treelist operations matching @racketmodname[racket/list] that aren't in
+@racketmodname[racket/treelist].
 
 @deftogether[[
 @defproc[(treelist* [v any/c] ... [tl treelist?]) treelist?]
@@ -66,7 +67,7 @@ Treelist operations matching @racketmodname[racket/list] that aren't in @racketm
 Operations similar to their counterparts from @racketmodname[racket/list].
 }
 
-@defproc[(treelist-index-where [tl treelist?] [pred (any/c . -> . any/c)])
+@defproc[(treelist-index-where [tl treelist?] [pred (-> any/c any/c)])
          (or/c exact-nonnegative-integer? #f)]{
 
 Returns the index of the first element in @racket[tl] where applying
@@ -86,8 +87,9 @@ If no such element is found, the result is @racket[#f].
 @defproc[(treelist-indexes-of [tl treelist?]
                               [v any/c]
                               [eql? (-> any/c any/c any/c) equal?])
-         treelist?]
-@defproc[(treelist-indexes-where [tl treelist?] [pred (-> any/c any/c)]) treelist?]
+         (treelist/c exact-nonnegative-integer?)]
+@defproc[(treelist-indexes-where [tl treelist?] [pred (-> any/c any/c)])
+         (treelist/c exact-nonnegative-integer?)]
 @defproc[(treelist-split [tl treelist?] [pos exact-nonnegative-integer?])
          (values treelist? treelist?)]
 @defproc[(treelist-takef [tl treelist?] [pred (-> any/c any/c)]) treelist?]
@@ -95,7 +97,7 @@ If no such element is found, the result is @racket[#f].
 Operations similar to their counterparts from @racketmodname[racket/list].
 }
 
-@defproc[(treelist-splitf [tl treelist?] [pred (any/c . -> . any/c)])
+@defproc[(treelist-splitf [tl treelist?] [pred (-> any/c any/c)])
          (values treelist? treelist?)]{
 
 Splits @racket[tl] into 2 treelists returned as values.
@@ -174,13 +176,15 @@ first element not satisfying @racket[pred] and onward.
 @defproc[(treelist-group-by [key (-> any/c any/c)]
                             [tl treelist?]
                             [eql? (-> any/c any/c any/c) equal?])
-         treelist?]]]{
+         (treelist/c treelist?)]]]{
 Operations similar to their counterparts from @racketmodname[racket/list].
 }
 
 @deftogether[[
-@defproc[(treelist-cartesian-product [tl treelist?] ...) treelist?]
-@defproc[(treelist-cartesian-product* [tls treelist?]) treelist?]]]{
+@defproc[(treelist-cartesian-product [tl treelist?] ...)
+         (treelist/c treelist?)]
+@defproc[(treelist-cartesian-product* [tls (treelist/c treelist?)])
+         (treelist/c treelist?)]]]{
 Computes the n-ary cartesian product of the given treelists.
 
 @examples[
