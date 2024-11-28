@@ -6,12 +6,15 @@
 
 (define deps
   '("base"
-    "reprovide-lang-lib"))
+    "reprovide-lang-lib"
+    "rhombus-lib"))
 
 (define build-deps
-  '("scribble-lib"
-    "racket-doc"
-    "rackunit-lib"))
+  '("racket-doc"
+    "rackunit-lib"
+    "rhombus"
+    "rhombus-scribble-lib"
+    "scribble-lib"))
 
 (define pkg-desc
   "Treelist operations matching racket/list that aren't in racket/treelist")
