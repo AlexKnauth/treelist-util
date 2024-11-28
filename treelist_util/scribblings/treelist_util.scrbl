@@ -78,6 +78,36 @@ onward.
 }
 
 @doc(
+  fun List.append_all(ls :: List.of(List)) :: List
+){
+Appends elements of a list of lists together into one list,
+leaving any further nested lists alone.
+
+@examples(
+  ~eval: the_eval, 
+  ~check:
+    List.append_all([["a", "b"], ["c", ["d"], "e"], []])
+    ~is ["a", "b", "c", ["d"], "e"]
+)
+}
+
+@doc(
+  fun List.flatten(v :: Any) :: List
+){
+Flattens a tree of nested lists into a single list.
+
+@examples(
+  ~eval: the_eval, 
+  ~check:
+    List.flatten([["a"], "b", ["c", ["d", "e"], []]])
+    ~is ["a", "b", "c", "d", "e"]
+  ~check:
+    List.flatten("a")
+    ~is ["a"]
+)
+}
+
+@doc(
   fun List.cartesian_product(l :: List, ...) :: List.of(List),
   fun List.cartesian_product_all(ls :: List.of(List)) :: List.of(List)
 ){
