@@ -6,6 +6,7 @@
          treelist-ormap
          treelist-foldl
          treelist-foldr
+         treelist-filter
          treelist-remove
          treelist-remq
          treelist-remv
@@ -30,6 +31,7 @@
          treelist-fourteenth
          treelist-fifteenth
          treelist-update
+         treelist-index-of
          treelist-index-where
          treelist-indexes-of
          treelist-indexes-where
