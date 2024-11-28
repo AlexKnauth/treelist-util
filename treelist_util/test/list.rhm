@@ -3,12 +3,12 @@
 import:
   treelist_util open
 
-check:
-  List.length(["a", "b", "c"])
-  ~is 3
+check: List.length(["a", "b", "c"]) ~is 3
 
-fun is_positive(x :: Real) :: Boolean:
-  0 < x
+fun is_positive(x :: Real) :: Boolean: 0 < x
+fun is_negative(x :: Real) :: Boolean: x < 0
+fun is_even(x :: Integral) :: Boolean: (x mod 2) == 0
+fun is_odd(x :: Integral) :: Boolean: (x mod 2) == 1
 
 check:
   List.andmap(is_positive, [1, 2, 3])
@@ -23,4 +23,409 @@ check:
 check:
   List.andmap(is_positive, [1, -2, "a"])
   ~is #false
+
+check:
+  List.ormap(is_positive, [1, 2, "a"])
+  ~is #true
+
+check:
+  List.ormap(is_positive, [-1, -2, 0])
+  ~is #false
+
+check:
+  List.foldl(List.cons, [], [1, 2, 3, 4])
+  ~is [4, 3, 2, 1]
+check:
+  List.foldl(fun(b, as :: List): as.add(b), [], [1, 2, 3, 4])
+  ~is [1, 2, 3, 4]
+check:
+  List.foldl((_ + _), 0, [1, 2, 3, 4])
+  ~is 10
+check:
+  List.foldl(fun(a, b, result):
+               result * (a - b),
+             1,
+             [1, 2, 3],
+             [4, 5, 6])
+  ~is -27
+
+check:
+  List.foldr(List.cons, [], [1, 2, 3, 4])
+  ~is [1, 2, 3, 4]
+check:
+  List.foldr(fun(v, l): List.cons(v + 1, l), [], [1, 2, 3, 4])
+  ~is [2, 3, 4, 5]
+
+check:
+  List.filter(~keep: is_even, [1, 2, 3, 2, 4, 5, 2])
+  ~is [2, 2, 4, 2]
+check:
+  List.filter(~keep: is_odd, [1, 2, 3, 2, 4, 5, 2])
+  ~is [1, 3, 5]
+check:
+  List.filter(~skip: is_even, [1, 2, 3, 2, 4, 5, 2])
+  ~is [1, 3, 5]
+check:
+  List.filter(~skip: is_odd, [1, 2, 3, 2, 4, 5, 2])
+  ~is [2, 2, 4, 2]
+
+check:
+  List.filter(~keep: is_even, [1, 2, 3, 2, 4, 5, 2]).length()
+  ~is 4
+
+check:
+  List.remove([1, 2, 3, 2, 4], 2)
+  ~is [1, 3, 2, 4]
+check:
+  List.remove([1, 2, 3, 2, 4], 2).length()
+  ~is 4
+check:
+  List.remove([1, 2, 3, 2, 4], 2).remove(2)
+  ~is [1, 3, 4]
+check:
+  List.remove([1, 2, 3, 2, 4], 2).remove(2).length()
+  ~is 3
+check:
+  List.remove([[1], [2], [3]], [2])
+  ~is [[1], [3]]
+check:
+  List.remove(["1", "2", "3"], "2")
+  ~is ["1", "3"]
+check:
+  List.remove([#'a, #'b, #'c], #'c)
+  ~is [#'a, #'b]
+#//
+check:
+  List.remove(["a", "A", "b", "B"], "B", fun(a :: StringCI, b :: StringCI): a == b)
+  ~is ["a", "A", "B"]
+check:
+  List.remove([1, 2, 3, 2, 4], 5)
+  ~is [1, 2, 3, 2, 4]
+block:
+  let l: [1, 2, 3, 2, 4]
+  check:
+    List.remove(l, 5) === l
+    ~is #true
+
+check:
+  List.remf([1, -2, 3, 4, -5], is_negative)
+  ~is [1, 3, 4, -5]
+check:
+  List.remf([1, -2, 3, 4, -5], is_negative).length()
+  ~is 4
+
+check:
+  List.remove_all([1, 2, 3, 2, 4, 5, 2], [1, 2])
+  ~is [3, 4, 5]
+
+check:
+  List.remove_all([1, 2, 3, 2, 4, 5, 2], [1, 2]).length()
+  ~is 3
+
+// ---------------------------------------------------------
+
+check:
+  List.update([#'zero, #'one, #'two], 1, to_string)
+  ~is [#'zero, "one", #'two]
+
+check:
+  List.update([#'zero, #'one, #'two], 1, to_string).length()
+  ~is 3
+
+check:
+  List.index_of([1, "a", #'apple], 1)
+  ~is 0
+check:
+  List.index_of([1, "a", #'apple], "a")
+  ~is 1
+check:
+  List.index_of([1, "a", #'apple], #'apple)
+  ~is 2
+check:
+  List.index_of([1, "a", #'apple], #'unicorn)
+  ~is #false
+
+check:
+  List.index_where([1, "a", #'apple], (_ is_a Number))
+  ~is 0
+check:
+  List.index_where([1, "a", #'apple], (_ is_a String))
+  ~is 1
+check:
+  List.index_where([1, "a", #'apple], (_ is_a Symbol))
+  ~is 2
+check:
+  List.index_where([1, "a", #'apple], (_ is_a Void))
+  ~is #false
+
+check:
+  List.indexes_of([1, 2, 1, 2, 1], 2)
+  ~is [1, 3]
+check:
+  List.indexes_of([1, 2, 1, 2, 1], 2).length()
+  ~is 2
+check:
+  List.indexes_of([1, 2, 1, 2, 1], 2)[0] < List.indexes_of([1, 2, 1, 2, 1], 2)[1]
+  ~is #true
+
+check:
+  List.indexes_where([1, 2, 3, 4], is_even)
+  ~is [1, 3]
+check:
+  List.indexes_where([1, 2, 3, 4], is_even).length()
+  ~is 2
+check:
+  List.indexes_where([1, 2, 3, 4], is_even)[0]
+    < List.indexes_where([1, 2, 3, 4], is_even)[1]
+  ~is #true
+
+def small_list: [0, "a", #'b, #'~c]
+check:
+  List.split(small_list, 0)
+  ~is values(List.empty, small_list)
+check:
+  List.split(small_list, 1)
+  ~is values([0], ["a", #'b, #'~c])
+check:
+  List.split(small_list, 2)
+  ~is values([0, "a"], [#'b, #'~c])
+check:
+  List.split(small_list, 3)
+  ~is values([0, "a", #'b], [#'~c])
+check:
+  List.split(small_list, 4)
+  ~is values(small_list, List.empty)
+block:
+  let values(a, b): List.split(small_list, 2)
+  check: a.length() ~is 2
+  check: b.length() ~is 2
+
+check:
+  List.takef(small_list, (_ is_a Number))
+  ~is [0]
+check:
+  List.takef(small_list, (_ is_a String))
+  ~is []
+check:
+  List.takef([2, 4, 5, 8], is_even)
+  ~is [2, 4]
+check:
+  List.takef([2, 4, 5, 8], is_odd)
+  ~is []
+check:
+  List.takef([2, 4, 6, 8], is_even)
+  ~is [2, 4, 6, 8]
+check:
+  List.takef([2, 4, 6, 8], is_odd)
+  ~is []
+check:
+  List.takef([2, 4, 5, 8], is_even).length()
+  ~is 2
+
+check:
+  List.dropf(small_list, (_ is_a Number))
+  ~is ["a", #'b, #'~c]
+check:
+  List.dropf(small_list, (_ is_a String))
+  ~is small_list
+check:
+  List.dropf([2, 4, 5, 8], is_even)
+  ~is [5, 8]
+check:
+  List.dropf([2, 4, 5, 8], is_odd)
+  ~is [2, 4, 5, 8]
+check:
+  List.dropf([2, 4, 6, 8], is_even)
+  ~is []
+check:
+  List.dropf([2, 4, 6, 8], is_odd)
+  ~is [2, 4, 6, 8]
+check:
+  List.dropf([2, 4, 5, 8], is_even).length()
+  ~is 2
+
+check:
+  List.splitf(small_list, (_ is_a Number))
+  ~is values([0], ["a", #'b, #'~c])
+check:
+  List.splitf(small_list, (_ is_a String))
+  ~is values(List.empty, small_list)
+check:
+  List.splitf([2, 4, 5, 8], is_even)
+  ~is values([2, 4], [5, 8])
+check:
+  List.splitf([2, 4, 5, 8], is_odd)
+  ~is values([], [2, 4, 5, 8])
+check:
+  List.splitf([2, 4, 6, 8], is_even)
+  ~is values([2, 4, 6, 8], [])
+check:
+  List.splitf([2, 4, 6, 8], is_odd)
+  ~is values([], [2, 4, 6, 8])
+block:
+  let values(a, b): List.splitf([2, 4, 5, 8], is_even)
+  check: a.length() ~is 2
+  check: b.length() ~is 2
+
+check:
+  List.append_all([["a", "b"], ["c", ["d"], "e"], []])
+  ~is ["a", "b", "c", ["d"], "e"]
+check:
+  List.append_all([["a", "b"], ["c", ["d"], "e"], []]).length()
+  ~is 5
+
+check:
+  List.flatten([["a"], "b", ["c", ["d", "e"], []]])
+  ~is ["a", "b", "c", "d", "e"]
+check:
+  List.flatten("a")
+  ~is ["a"]
+check:
+  List.flatten([["a"], "b", ["c", ["d", "e"], []]]).length()
+  ~is 5
+check:
+  List.flatten("a").length()
+  ~is 1
+
+check:
+  List.filter_map([1, 2, -3, -4, 8], fun(x): is_negative(x) && math.abs(x))
+  ~is [3, 4]
+check:
+  List.filter_map([1, 2, -3, -4, 8], fun(x): is_negative(x) && math.abs(x)).length()
+  ~is 2
+
+check:
+  List.count([1, -1, 2, 3, -2, 5], is_positive)
+  ~is 4
+check:
+  List.count([1, 2, -3, -4, 8], is_positive)
+  ~is 3
+check:
+  List.count([1, 2, -3, -4, 8], fun(x): is_negative(x) && math.abs(x))
+  ~is 2
+check:
+  List.count([1, 2, -3, -4, 8], is_negative)
+  ~is 2
+check:
+  List.count([1, 2, -3, -4, 8], is_negative)
+    < List.count([1, 2, -3, -4, 8], is_positive)
+  ~is #true
+
+check:
+  List.partition([1, 2, 3, 4, 5, 6], is_even)
+  ~is values([2, 4, 6],
+             [1, 3, 5])
+block:
+  let values(a, b): List.partition([1, 2, 3, 4, 5, 6], is_even)
+  check: a.length() ~is 3
+  check: b.length() ~is 3
+
+check:
+  List.append_map(["1", "2 3", "4"], String.split)
+  ~is ["1", "2", "3", "4"]
+check:
+  List.append_map(["1", "2 3", "4"], String.split).length()
+  ~is 4
+
+check:
+  List.argmin([[3, "pears"], [1, "banana"], [2, "apples"]], List.first)
+  ~is [1, "banana"]
+check:
+  List.argmin([[1, "banana"], [1, "orange"]], List.first)
+  ~is [1, "banana"]
+
+check:
+  List.argmax([[3, "pears"], [1, "banana"], [2, "apples"]], List.first)
+  ~is [3, "pears"]
+check:
+  List.argmax([[3, "pears"], [3, "oranges"]], List.first)
+  ~is [3, "pears"]
+
+check:
+  List.group_by([1, 2, 1, 2, 54, 2, 5, 43, 7, 2, 643, 1, 2, 0], (_ mod 3))
+  ~is [[1, 1, 43, 7, 643, 1],
+       [2, 2, 2, 5, 2, 2],
+       [54, 0]]
+check:
+  List.group_by([1, 2, 1, 2, 54, 2, 5, 43, 7, 2, 643, 1, 2, 0], (_ mod 3)).length()
+  ~is 3
+check:
+  List.group_by([1, 2, 1, 2, 54, 2, 5, 43, 7, 2, 643, 1, 2, 0], (_ mod 3))[0]
+    .length()
+  ~is 6
+
+check:
+  List.cartesian_product([1, 2, 3], ["a", "b", "c"])
+  ~is [[1, "a"],
+       [1, "b"],
+       [1, "c"],
+       [2, "a"],
+       [2, "b"],
+       [2, "c"],
+       [3, "a"],
+       [3, "b"],
+       [3, "c"]]
+check:
+  List.cartesian_product_all([[1, 2, 3], ["a", "b", "c"]])
+  ~is [[1, "a"],
+       [1, "b"],
+       [1, "c"],
+       [2, "a"],
+       [2, "b"],
+       [2, "c"],
+       [3, "a"],
+       [3, "b"],
+       [3, "c"]]
+check:
+  List.cartesian_product([4, 5, 6], ["d", "e", "f"], [#true, #false])
+  ~is [[4, "d", #true],
+       [4, "d", #false],
+       [4, "e", #true],
+       [4, "e", #false],
+       [4, "f", #true],
+       [4, "f", #false],
+       [5, "d", #true],
+       [5, "d", #false],
+       [5, "e", #true],
+       [5, "e", #false],
+       [5, "f", #true],
+       [5, "f", #false],
+       [6, "d", #true],
+       [6, "d", #false],
+       [6, "e", #true],
+       [6, "e", #false],
+       [6, "f", #true],
+       [6, "f", #false]]
+check:
+  List.cartesian_product_all([[4, 5, 6], ["d", "e", "f"], [#true, #false]])
+  ~is [[4, "d", #true],
+       [4, "d", #false],
+       [4, "e", #true],
+       [4, "e", #false],
+       [4, "f", #true],
+       [4, "f", #false],
+       [5, "d", #true],
+       [5, "d", #false],
+       [5, "e", #true],
+       [5, "e", #false],
+       [5, "f", #true],
+       [5, "f", #false],
+       [6, "d", #true],
+       [6, "d", #false],
+       [6, "e", #true],
+       [6, "e", #false],
+       [6, "f", #true],
+       [6, "f", #false]]
+check:
+  List.cartesian_product([1, 2, 3], ["a", "b", "c"]).length()
+  ~is 9
+check:
+  List.cartesian_product([1, 2, 3], ["a", "b", "c"])[0].length()
+  ~is 2
+check:
+  List.cartesian_product_all([[1, 2, 3], ["a", "b", "c"]]).length()
+  ~is 9
+check:
+  List.cartesian_product_all([[1, 2, 3], ["a", "b", "c"]])[0].length()
+  ~is 2
 

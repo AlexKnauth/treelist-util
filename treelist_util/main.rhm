@@ -12,41 +12,71 @@ def List.ormap: #{treelist-ormap}
 def List.foldl: #{treelist-foldl}
 def List.foldr: #{treelist-foldr}
 
-def List.filter: #{treelist-filter}
-def List.filter_not: #{treelist-filter-not}
+fun List.filter(tl :: List,
+                ~keep: keep = fun (_): #true,
+                ~skip: skip = fun (_): #false) :: List:
+  for List (el: tl):
+    keep_when: keep(el)
+    skip_when: skip(el)
+    el
+
+fun List.remf(tl :: List, pred) :: List:
+  #{treelist-remf}(pred, tl)
+
+fun List.remove_all(tl :: List, vs :: List) :: List:
+  #{treelist-remove*}(vs, tl, (_ == _))
 
 def List.is_empty: #{treelist-empty?}
 
-def List.update: #{treelist-update}
+fun List.update(tl :: List, pos :: NonnegInt, updater) :: List:
+  #{treelist-update}(tl, pos, updater)
 
-def List.index_of: #{treelist-index-of}
+fun List.index_of(tl :: List, v) :: maybe(NonnegInt):
+  #{treelist-index-of}(tl, v, (_ == _))
 def List.index_where: #{treelist-index-where}
 
-def List.indexes_of: #{treelist-indexes-of}
-def List.indexes_where: #{treelist-indexes-where}
+fun List.indexes_of(tl :: List, v) :: List.of(NonnegInt):
+  #{treelist-indexes-of}(tl, v, (_ == _))
+fun List.indexes_where(tl :: List, pred) :: List.of(NonnegInt):
+  #{treelist-indexes-where}(tl, pred)
 
-def List.split: #{treelist-split}
+fun List.split(tl :: List, pos :: NonnegInt) :: values(List, List):
+  #{treelist-split}(tl, pos)
 
-def List.takef: #{treelist-takef}
-def List.dropf: #{treelist-dropf}
-def List.splitf: #{treelist-splitf}
+fun List.takef(tl :: List, proc) :: List:
+  #{treelist-takef}(tl, proc)
+fun List.dropf(tl :: List, proc) :: List:
+  #{treelist-dropf}(tl, proc)
+fun List.splitf(tl :: List, proc) :: values(List, List):
+  #{treelist-splitf}(tl, proc)
 
-def List.append_all: #{treelist-append*}
+fun List.append_all(tls :: List.of(List)) :: List:
+  #{treelist-append*}(tls)
 
-def List.flatten: #{treelist-flatten}
+fun List.flatten(v) :: List:
+  #{treelist-flatten}(v)
 
-def List.filter_map: #{treelist-filter-map}
-def List.count: #{treelist-count}
+fun List.filter_map(tl :: List, proc) :: List:
+  #{treelist-filter-map}(proc, tl)
+fun List.count(tl :: List, proc) :: NonnegInt:
+  #{treelist-count}(proc, tl)
 
-def List.partition: #{treelist-partition}
+fun List.partition(tl :: List, pred) :: values(List, List):
+  #{treelist-partition}(pred, tl)
 
-def List.append_map: #{treelist-append-map}
+fun List.append_map(tl :: List, proc) :: List:
+  #{treelist-append-map}(proc, tl)
 
-def List.argmin: #{treelist-argmin}
-def List.argmax: #{treelist-argmax}
+fun List.argmin(tl :: List, proc):
+  #{treelist-argmin}(proc, tl)
+fun List.argmax(tl :: List, proc):
+  #{treelist-argmax}(proc, tl)
 
-def List.group_by: #{treelist-group-by}
+fun List.group_by(tl :: List, proc) :: List.of(List):
+  #{treelist-group-by}(proc, tl, (_ == _))
 
-def List.cartesian_product: #{treelist-cartesian-product}
-def List.cartesian_product_all: #{treelist-cartesian-product*}
+fun List.cartesian_product(tl :: List, ...) :: List.of(List):
+  #{treelist-cartesian-product}(tl, ...)
+fun List.cartesian_product_all(tls :: List.of(List)) :: List.of(List):
+  #{treelist-cartesian-product*}(tls)
 
