@@ -50,6 +50,8 @@
          treelist-drop-common-prefix
          treelist-split-common-prefix
          treelist-add-between
+         treelist-append*
+         treelist-flatten
          treelist-check-duplicates
          treelist-remove-duplicates
          treelist-filter-map
@@ -648,6 +650,22 @@
        [(= i nm1) (treelist-add (treelist-append acc before-lasts) el)]
        [else (treelist-add (treelist-append acc vs) el)]))
    after-last))
+
+(if-not-exported
+ racket/treelist
+ treelist-append*
+ (define (treelist-append* tls)
+   (for/fold ([acc empty-treelist])
+             ([tl (in-treelist tls)])
+     (treelist-append acc tl))))
+
+(if-not-exported
+ racket/treelist
+ treelist-flatten
+ (define (treelist-flatten v)
+   (cond
+     [(treelist? v) (treelist-append-map treelist-flatten v)]
+     [else (treelist v)])))
 
 ;; treelist-check-duplicates
 (module+ test
