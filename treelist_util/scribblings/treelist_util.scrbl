@@ -8,6 +8,8 @@
   ~eval: the_eval,
   ~hidden:
     import: treelist_util open
+    fun is_positive(x :: Real) :: Boolean: 0 < x
+    fun is_negative(x :: Real) :: Boolean: x < 0
     fun is_even(x :: Integral) :: Boolean: (x mod 2) == 0
     fun is_odd(x :: Integral) :: Boolean: (x mod 2) == 1
 )
@@ -22,6 +24,24 @@ List operations matching @racketmodname(racket/list) that aren't in
 @rhombus(rhombus.List, ~annot).
 
 @doc(
+  fun List.index_of(l :: List, v :: Any) :: maybe(NonnegInt)
+){
+Returns the index of the first element in @rhombus(l) that
+is @rhombus(==) to @rhombus(v).
+If no such element is found, the result is @rhombus(#false).
+
+@examples(
+  ~eval: the_eval,
+  ~check:
+    List.index_of([2, 4, 5, 8], 5)
+    ~is 2
+  ~check:
+    List.index_of([2, 4, 5, 8], 6)
+    ~is #false
+)
+}
+
+@doc(
   fun List.index_where(l :: List, pred :: Function.of_arity(1)) :: maybe(NonnegInt)
 ){
 Returns the index of the first element in @rhombus(l) where
@@ -33,6 +53,9 @@ If no such element is found, the result is @rhombus(#false).
   ~check:
     List.index_where([2, 4, 5, 8], is_odd)
     ~is 2
+  ~check:
+    List.index_where([2, 4, 5, 8], is_negative)
+    ~is #false
 )
 }
 
