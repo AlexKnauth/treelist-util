@@ -1,7 +1,4 @@
-#lang rhombus/and_meta
-
-// TODO: turn back to rhombus/static/and_meta
-// after export namespace extension static-info
+#lang rhombus/static/and_meta
 
 import:
   treelist_util open
