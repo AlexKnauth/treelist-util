@@ -21,7 +21,7 @@
 @docmodule(treelist_util)
 
 List operations matching @racketmodname(racket/list) that aren't in
-@rhombus(rhombus.List, ~annot).
+Rhombus @rhombus(List, ~annot).
 
 @doc(
   fun List.index_of(l :: List, v :: Any) :: maybe(NonnegInt)
