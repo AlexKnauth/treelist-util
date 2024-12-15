@@ -2,9 +2,9 @@
 
 (provide if-not-exported)
 
-(require syntax/parse/define
-         (for-syntax racket/base
-                     racket/syntax))
+(require (for-syntax racket/base
+                     racket/syntax)
+         syntax/parse/define)
 
 (define-syntax-parser if-not-exported
   [(if-not-exported m:expr x:id body:expr ...)
