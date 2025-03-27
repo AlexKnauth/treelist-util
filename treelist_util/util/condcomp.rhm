@@ -1,0 +1,20 @@
+#lang rhombus/static/and_meta
+
+export: if_not_exported
+
+meta:
+  fun is_name_defined(n :: Name):
+    syntax_meta.value(n, expr_meta.space, fun (): #false)
+      || (try:
+            match n
+            | '$(_ :: expr_meta.Parsed)':  #true
+            | ~else:  #false
+            ~catch _ :: Exn.Fail.Syntax: #false)
+
+defn.macro 'if_not_exported $(n :: Name):
+              $d
+              ...':
+  if is_name_defined(n)
+  | 'block: ('$n'); #void'
+  | '$d
+     ...'

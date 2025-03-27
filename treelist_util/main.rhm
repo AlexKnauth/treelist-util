@@ -5,6 +5,7 @@ export:
 
 import:
   lib("treelist-util/main.rkt") open
+  treelist_util/util/condcomp open
 
 def List.andmap: #{treelist-andmap}
 def List.ormap: #{treelist-ormap}
@@ -12,13 +13,14 @@ def List.ormap: #{treelist-ormap}
 def List.foldl: #{treelist-foldl}
 def List.foldr: #{treelist-foldr}
 
-fun List.filter(tl :: List,
-                ~keep: keep = fun (_): #true,
-                ~skip: skip = fun (_): #false) :: List:
-  for List (el: tl):
-    keep_when: keep(el)
-    skip_when: skip(el)
-    el
+if_not_exported List.filter:
+  fun List.filter(tl :: List,
+                  ~keep: keep = fun (_): #true,
+                  ~skip: skip = fun (_): #false) :: List:
+    for List (el: tl):
+      keep_when: keep(el)
+      skip_when: skip(el)
+      el
 
 fun List.remf(tl :: List, pred) :: List:
   #{treelist-remf}(pred, tl)
@@ -61,8 +63,9 @@ fun List.filter_map(tl :: List, proc) :: List:
 fun List.count(tl :: List, proc) :: NonnegInt:
   #{treelist-count}(proc, tl)
 
-fun List.partition(tl :: List, pred) :: values(List, List):
-  #{treelist-partition}(pred, tl)
+if_not_exported List.partition:
+  fun List.partition(tl :: List, pred) :: values(List, List):
+    #{treelist-partition}(pred, tl)
 
 fun List.append_map(tl :: List, proc) :: List:
   #{treelist-append-map}(proc, tl)
