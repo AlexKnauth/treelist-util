@@ -3,6 +3,8 @@
 @(import:
     rhombus meta_label: open
     treelist_util meta_label: open)
+@(fun author(auth):
+    para(~style: #'author, auth))
 @(def the_eval: make_rhombus_eval())
 @examples(
   ~eval: the_eval,
@@ -16,7 +18,7 @@
 
 @title{treelist_util}
 
-@//author{Alex Knauth}
+@author{Alex Knauth}
 
 @docmodule(treelist_util)
 
